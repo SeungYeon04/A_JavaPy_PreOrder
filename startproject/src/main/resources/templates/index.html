@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플라스틱 재활용 정책 제안 플랫폼</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">플라스틱 재활용 정책 제안 플랫폼</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">홈</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/posts">정책 제안</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">대시보드</a></li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">로그인</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="/logout">로그아웃</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">플라스틱 재활용 정책 제안 플랫폼</h1>
+            <p class="lead">기업 중심의 플라스틱 재활용 정책을 제안하고 순환 경제 생태계를 구축하는 플랫폼입니다.</p>
+            <hr class="my-4">
+            <p>재활용 플라스틱으로 신제품을 제조하는 공장 지원, 재활용 물품 수입 공장 지원, 폐기물 재활용 공장 지원 등 데이터 기반 정책을 제안합니다.</p>
+            <a class="btn btn-primary btn-lg" href="/posts" role="button">정책 제안 보기</a>
+            <a class="btn btn-secondary btn-lg" href="/dashboard" role="button">대시보드 보기</a>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">정책 제안</h5>
+                        <p class="card-text">플라스틱 재활용 관련 기업 지원 정책을 제안하고 다른 사용자들과 의견을 나눕니다.</p>
+                        <a href="/posts" class="btn btn-primary">바로가기</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">데이터 분석</h5>
+                        <p class="card-text">공공 데이터를 기반으로 플라스틱 재활용 현황과 순환 경제를 분석하고 시각화합니다.</p>
+                        <a href="/dashboard" class="btn btn-primary">바로가기</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">통계 대시보드</h5>
+                        <p class="card-text">정책 제안 통계와 데이터 분석 결과를 한눈에 확인합니다.</p>
+                        <a href="/dashboard" class="btn btn-primary">바로가기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p>&copy; 2024 플라스틱 재활용 정책 제안 플랫폼. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${post.id != null ? '게시글 수정' : '새 글 작성'}">게시글 작성</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">고령화 대응 정책 제안 플랫폼</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 th:text="${post.id != null ? '게시글 수정' : '새 글 작성'}">게시글 작성</h2>
+        
+        <form th:action="${post.id != null ? '/posts/' + post.id : '/posts'}" 
+              th:object="${post}" method="post">
+            <div class="mb-3">
+                <label for="title" class="form-label">제목</label>
+                <input type="text" class="form-control" id="title" th:field="*{title}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="category" class="form-label">카테고리</label>
+                <select class="form-select" id="category" th:field="*{category}" required>
+                    <option value="">선택하세요</option>
+                    <option value="재활용제조공장지원">재활용 제조 공장 지원</option>
+                    <option value="재활용수입공장지원">재활용 수입 공장 지원</option>
+                    <option value="폐기물재활용공장지원">폐기물 재활용 공장 지원</option>
+                    <option value="순환경제생태계">순환 경제 생태계</option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <textarea class="form-control" id="content" th:field="*{content}" rows="10" required></textarea>
+            </div>
+            
+            <div class="d-flex justify-content-end gap-2">
+                <a href="/posts" class="btn btn-secondary">취소</a>
+                <button type="submit" class="btn btn-primary" th:text="${post.id != null ? '수정' : '작성'}">작성</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${post.title}">게시글 보기</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">플라스틱 재활용 정책 제안 플랫폼</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 th:text="${post.title}"></h3>
+                <div class="mt-2">
+                    <span class="badge bg-info" th:text="${post.category}"></span>
+                    <span class="ms-2">작성자: <span th:text="${post.author}"></span></span>
+                    <span class="ms-2">조회수: <span th:text="${post.viewCount}"></span></span>
+                    <span class="ms-2">작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div th:utext="${#strings.replace(#strings.replace(post.content, '&#10;', '<br>'), '&#13;', '')}"></div>
+            </div>
+            <div class="card-footer">
+                <a href="/posts" class="btn btn-secondary">목록</a>
+                <span sec:authorize="isAuthenticated()">
+                    <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn btn-primary">수정</a>
+                    <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
