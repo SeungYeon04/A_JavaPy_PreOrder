@@ -34,3 +34,4 @@ public class User {
     private String picture; // 프로필 이미지 URL
 }
 
+

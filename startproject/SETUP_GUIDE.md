@@ -63,3 +63,4 @@ gradlew.bat bootRun  # Windows
 - Python 서비스가 실행 중인지 확인: http://localhost:5000/api/health
 - 방화벽 설정 확인
 
+

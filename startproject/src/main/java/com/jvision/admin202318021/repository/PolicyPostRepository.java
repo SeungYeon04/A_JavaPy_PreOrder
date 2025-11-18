@@ -19,3 +19,4 @@ public interface PolicyPostRepository extends JpaRepository<PolicyPost, Long> {
     List<Object[]> countByCategory();
 }
 
+
