@@ -1,0 +1,29 @@
+{{>layout/header}}
+
+<!-- 수정한 emp 받을 머스태치 (걍 이게 html이라 생각하면 될듯.)
+부트스트랩 get 소스 코드: https://getbootstrap.com/docs/5.0/content/tables/
+-->
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Handle</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#resultmd}}
+    <tr>
+        <th scope="row">{{name}}</th>
+        <td>{{dept}}</td>
+        <td>{{position}}</td>
+        <td>{{tel}}</td>
+        <td>{{email}}</td>
+    </tr>
+    {{/resultmd}}
+    </tbody>
+</table>
+
+{{>layout/footer}}
