@@ -17,12 +17,18 @@ public class EmpController {
     @Autowired
     private EmpRepository empRepository;
 
-    // 루트 화면 - 데이터 테이블 보여주기
+    // 루트 화면 - 소개페이지
     @GetMapping("/")
-    public String index(Model model) {
+    public String index() {
+        return "intro";
+    }
+
+    // 커뮤니티 게시판
+    @GetMapping("/community")
+    public String community(Model model) {
         List<Emp> empEntity = (List<Emp>) empRepository.findAll();
         model.addAttribute("resultList", empEntity);
-        return "index";
+        return "community";
     }
 
     // 등록 폼 화면
@@ -43,7 +49,7 @@ public class EmpController {
         Emp save = empRepository.save(emp); //H2 DB에 저장
         log.info(save.toString());
 
-        return "redirect:/";
+        return "redirect:/community";
     }
 
     // 수정 폼 보여주기
@@ -75,7 +81,7 @@ public class EmpController {
             }
         }
 
-        return "redirect:/";
+        return "redirect:/community";
     }
 
     // 삭제
@@ -83,7 +89,7 @@ public class EmpController {
     public String deleteArticle(@PathVariable Long id) {
         log.info("삭제 id: " + id);
         empRepository.deleteById(id);
-        return "redirect:/";
+        return "redirect:/community";
     }
 
     // 전체 삭제
@@ -91,7 +97,7 @@ public class EmpController {
     public String deleteAll() {
         log.info("전체 삭제");
         empRepository.deleteAll();
-        return "redirect:/";
+        return "redirect:/community";
     }
 
     // 단일 데이터 조회용
@@ -107,6 +113,18 @@ public class EmpController {
         model.addAttribute("resultmd", empEntity);
 
         return "result/showmd";
+    }
+
+    // API 환경데이터 시각화
+    @GetMapping("/data")
+    public String data() {
+        return "data";
+    }
+
+    // 아이디어 투표
+    @GetMapping("/idea")
+    public String idea() {
+        return "idea";
     }
 
 }

@@ -1,7 +1,7 @@
 {{>layout/header}}
 
 <div class="container mt-4">
-    <h2 class="mb-4">{{#empForm.id}}사원 정보 수정{{/empForm.id}}{{^empForm.id}}사원 정보 등록{{/empForm.id}}</h2>
+    <h2 class="mb-4">{{#empForm.id}}게시글 수정{{/empForm.id}}{{^empForm.id}}게시글 등록{{/empForm.id}}</h2>
 
     <!-- 등록/수정 폼 -->
     <div class="card">
@@ -18,8 +18,25 @@
 
                 <div class="mb-3">
                     <label class="form-label">카테고리</label>
-                    <input type="text" class="form-control" name="tel" value="{{#empForm.tel}}{{empForm.tel}}{{/empForm.tel}}" required>
+                    <select class="form-select" name="tel" id="keywordSelect" required>
+                        <option value="">키워드를 선택하세요</option>
+                        <option value="#쓰레기">#쓰레기</option>
+                        <option value="#에너지">#에너지</option>
+                        <option value="#순환">#순환</option>
+                        <option value="#재활용">#재활용</option>
+                    </select>
                 </div>
+                {{#empForm.tel}}
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var select = document.getElementById('keywordSelect');
+                        var currentValue = '{{empForm.tel}}';
+                        if (select && currentValue) {
+                            select.value = currentValue;
+                        }
+                    });
+                </script>
+                {{/empForm.tel}}
 
                 <div class="mb-3">
                     <label class="form-label">타이틀</label>
@@ -32,7 +49,7 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <a href="/" class="btn btn-secondary">취소</a>
+                    <a href="/community" class="btn btn-secondary">취소</a>
                     <button type="submit" class="btn btn-primary">{{#empForm.id}}수정{{/empForm.id}}{{^empForm.id}}등록{{/empForm.id}}</button>
                     {{#empForm.id}}
                     <button type="button" class="btn btn-danger" onclick="if(confirm('정말 삭제하시겠습니까?')) { document.getElementById('deleteForm').submit(); }">삭제</button>

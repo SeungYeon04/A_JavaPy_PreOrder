@@ -1,0 +1,172 @@
+{{>layout/header}}
+
+<!-- 정해진 값이 아닌, API 받아서 하는 방식으로 해야함 -->
+<div class="container mt-4">
+    <h2 class="mb-4">API 환경데이터 시각화</h2>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">환경 데이터 개요</h5>
+            <p class="card-text">
+                환경 보호와 관련된 다양한 데이터를 시각화하여 제공합니다.
+                대기질, 폐기물, 재활용률 등의 환경 지표를 확인할 수 있습니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- 차트 영역 -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">대기질 지수</h5>
+                    <canvas id="airQualityChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">재활용률</h5>
+                    <canvas id="recycleChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">월별 환경 지표</h5>
+                    <canvas id="monthlyChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 데이터 테이블 -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">환경 데이터 상세</h5>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>대기질 지수</th>
+                            <th>재활용률 (%)</th>
+                            <th>폐기물 감소율 (%)</th>
+                            <th>에너지 절약량 (kWh)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-01</td>
+                            <td>좋음 (45)</td>
+                            <td>68.5</td>
+                            <td>12.3</td>
+                            <td>1,250</td>
+                        </tr>
+                        <tr>
+                            <td>2024-02</td>
+                            <td>보통 (55)</td>
+                            <td>70.2</td>
+                            <td>15.1</td>
+                            <td>1,380</td>
+                        </tr>
+                        <tr>
+                            <td>2024-03</td>
+                            <td>좋음 (42)</td>
+                            <td>72.8</td>
+                            <td>18.5</td>
+                            <td>1,520</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js 라이브러리 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // 대기질 차트
+    const airQualityCtx = document.getElementById('airQualityChart').getContext('2d');
+    new Chart(airQualityCtx, {
+        type: 'line',
+        data: {
+            labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+            datasets: [{
+                label: '대기질 지수',
+                data: [45, 55, 42, 48, 50, 46],
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 30,
+                    max: 80
+                }
+            }
+        }
+    });
+
+    // 재활용률 차트
+    const recycleCtx = document.getElementById('recycleChart').getContext('2d');
+    new Chart(recycleCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['재활용', '일반폐기물', '음식물쓰레기'],
+            datasets: [{
+                data: [72.8, 18.5, 8.7],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(255, 206, 86, 0.8)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    // 월별 환경 지표 차트
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+        type: 'bar',
+        data: {
+            labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+            datasets: [
+                {
+                    label: '재활용률 (%)',
+                    data: [68.5, 70.2, 72.8, 71.5, 73.2, 74.1],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                },
+                {
+                    label: '폐기물 감소율 (%)',
+                    data: [12.3, 15.1, 18.5, 16.8, 19.2, 20.5],
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{{>layout/footer}}
+
