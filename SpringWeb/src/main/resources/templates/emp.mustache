@@ -1,0 +1,50 @@
+{{>layout/header}}
+
+<div class="container mt-4">
+    <h2 class="mb-4">{{#empForm.id}}사원 정보 수정{{/empForm.id}}{{^empForm.id}}사원 정보 등록{{/empForm.id}}</h2>
+
+    <!-- 등록/수정 폼 -->
+    <div class="card">
+        <div class="card-body">
+            <form action="{{#empForm.id}}/emp/update{{/empForm.id}}{{^empForm.id}}/emp/register{{/empForm.id}}" method="post">
+                {{#empForm.id}}
+                <input type="hidden" name="id" value="{{empForm.id}}">
+                {{/empForm.id}}
+
+                <div class="mb-3">
+                    <label class="form-label">닉네임</label>
+                    <input type="text" class="form-control" name="name" value="{{#empForm.name}}{{empForm.name}}{{/empForm.name}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">카테고리</label>
+                    <input type="text" class="form-control" name="tel" value="{{#empForm.tel}}{{empForm.tel}}{{/empForm.tel}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">타이틀</label>
+                    <input type="text" class="form-control" name="address" value="{{#empForm.address}}{{empForm.address}}{{/empForm.address}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">글내용</label>
+                    <textarea class="form-control" rows="3" name="intro">{{#empForm.intro}}{{empForm.intro}}{{/empForm.intro}}</textarea>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="/" class="btn btn-secondary">취소</a>
+                    <button type="submit" class="btn btn-primary">{{#empForm.id}}수정{{/empForm.id}}{{^empForm.id}}등록{{/empForm.id}}</button>
+                    {{#empForm.id}}
+                    <button type="button" class="btn btn-danger" onclick="if(confirm('정말 삭제하시겠습니까?')) { document.getElementById('deleteForm').submit(); }">삭제</button>
+                    {{/empForm.id}}
+                </div>
+            </form>
+            {{#empForm.id}}
+            <form id="deleteForm" action="/emp/delete/{{empForm.id}}" method="post" style="display: none;">
+            </form>
+            {{/empForm.id}}
+        </div>
+    </div>
+</div>
+
+{{>layout/footer}}
