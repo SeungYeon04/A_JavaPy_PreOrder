@@ -2,16 +2,79 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">아이디어 투표</h2>
-    
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">환경 보호 아이디어 투표</h5>
-            <p class="card-text">
-                커뮤니티에서 제안된 환경 보호 아이디어에 투표해주세요.
-            </p>
+    <p class="text-muted mb-4">제안된 정책 및 기술 아이디어에 좋아요/싫어요를 눌러주세요.</p>
+    <p class="text-muted mb-4">환경 정책, 기술 아이디어 등 지정하신 카테고리와 맞지 않는 글이나 일상글, 홍보를 하실 경우 제재 대상입니다.</p>
+
+    <div class="row">
+        {{#ideaList}}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="badge category-badge" data-category="{{category}}">{{category}}</span>
+                    <small class="text-muted">ID: {{id}}</small>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">{{content}}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group" role="group">
+                            <form action="/idea/like/{{id}}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-outline-success btn-sm">
+                                    👍 좋아요 <span class="badge bg-success">{{likes}}</span>
+                                </button>
+                            </form>
+                            <form action="/idea/dislike/{{id}}" method="post" style="display: inline; margin-left: 5px;">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    👎 싫어요 <span class="badge bg-danger">{{dislikes}}</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        {{/ideaList}}
+        {{^ideaList}}
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                등록된 아이디어가 없습니다.
+            </div>
+        </div>
+        {{/ideaList}}
     </div>
 </div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .btn-group form {
+        display: inline-block;
+    }
+</style>
+
+<script>
+    // 카테고리별 배지 색상 설정
+    document.addEventListener('DOMContentLoaded', function() {
+        const badges = document.querySelectorAll('.category-badge');
+        badges.forEach(badge => {
+            const category = badge.getAttribute('data-category');
+            if (category === '정책') {
+                badge.classList.add('bg-primary');
+            } else if (category === '기술') {
+                badge.classList.add('bg-success');
+            } else {
+                badge.classList.add('bg-secondary');
+            }
+        });
+    });
+</script>
 
 {{>layout/footer}}
 
