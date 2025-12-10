@@ -7,6 +7,9 @@
     <div class="mb-4">
         <a href="/emp" class="btn btn-primary">글등록</a>
         <form action="/emp/deleteAll" method="post" style="display: inline;" onsubmit="return confirm('정말 전체 삭제하시겠습니까?');">
+            {{#_csrf}}
+            <input type="hidden" name="_csrf" value="{{token}}">
+            {{/_csrf}}
             <button type="submit" class="btn btn-danger">전체삭제</button>
         </form>
     </div>

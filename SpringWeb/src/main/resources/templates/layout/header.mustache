@@ -79,6 +79,18 @@
                     <a class="nav-link" href="/idea">아이디어 투표</a>
                 </li>
             </ul>
+            <div class="d-flex">
+                {{#principal.authenticated}}
+                    <span class="navbar-text me-3">안녕하세요, {{principal.name}}님</span>
+                    <form action="/logout" method="post" class="d-inline">
+                        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                        <button type="submit" class="btn btn-outline-danger">로그아웃</button>
+                    </form>
+                {{/principal.authenticated}}
+                {{^principal.authenticated}}
+                    <a href="/oauth2/authorization/github" class="btn btn-outline-primary">GitHub 로그인</a>
+                {{/principal.authenticated}}
+            </div>
         </div>
     </div>
 </nav>
