@@ -51,3 +51,18 @@ vulnerable_comb = agg_comb.sort_values('recycling_rate').query('total_generated>
 ]
 
 master_1to3.csv(월단위[꼭 월 단위 일 필요는 없음]·군구·재질별 집계)와 summary_stats.csv(재질별 합계 및 재활용률) 작성
+
+[실행]
+
+Set-Location 'D:\Github\A_JavaPy_PreOrder\SpringWeb'; $procs = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'startproject' -or $_.CommandLine -match 'startproject-0.0.1' }; if($procs) { $procs | ForEach-Object { Write-Output "Stopping PID:$($_.ProcessId)"; Stop-Process -Id $_.ProcessId -Force } } else { Write-Output 'No startproject JVM process found' }; $jar = Get-ChildItem -Path build\libs -Filter '*startproject*.jar' | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if(-not $jar) { Write-Output 'JAR not found - building...'; .\gradlew.bat clean bootJar -x test --no-daemon --warning-mode=all; $jar = Get-ChildItem -Path build\libs -Filter '*startproject*.jar' | Sort-Object LastWriteTime -Descending | Select-Object -First 1 }; if($jar) { Write-Output "Starting $($jar.FullName)"; Start-Process -FilePath 'java' -ArgumentList '-jar', $jar.FullName -NoNewWindow -PassThru } else { Write-Output 'JAR not found after build' }; Start-Sleep -Seconds 2; try { $resp = Invoke-WebRequest -Uri 'http://localhost:8080/analysis_outputs/env_product_top5.png' -Method Head -TimeoutSec 10; Write-Output "HEAD STATUS:$($resp.StatusCode) Length:$($resp.Headers['Content-Length'])" } catch { Write-Output "HEAD failed: $($_.Exception.Message)" }
+
+Invoke-WebRequest -Uri 'http://localhost:8080/analysis_outputs/env_product_top5.png' -Method Head -TimeoutSec 10
+
+Get-Process -Name java -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,@{n='Cmd';e={(Get-CimInstance Win32_Process -Filter "ProcessId=$($_.Id)").CommandLine}}; Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue | Select-Object State,LocalAddress,LocalPort,OwningProcess
+
+Test-NetConnection -ComputerName localhost -Port 8080
+[종료]
+Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'startproject' -or $_.CommandLine -match 'startproject-0.0.1' } | ForEach-Object {
+    Write-Output "Stopping PID:$($_.ProcessId)";
+    Stop-Process -Id $_.ProcessId -Force
+}
