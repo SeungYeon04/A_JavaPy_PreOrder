@@ -11,6 +11,10 @@ public class StaticResourceConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/outputs/**")
                 .addResourceLocations("file:outputs/");
+    // serve runtime-generated analysis images from the project static folder so newly created
+    // files are available without rebuilding the classpath
+    registry.addResourceHandler("/analysis_outputs/**")
+        .addResourceLocations("file:src/main/resources/static/analysis_outputs/");
     }
 }
 

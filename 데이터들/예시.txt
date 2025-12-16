@@ -1,0 +1,53 @@
+year_month,year,month,region_code,region_name,material_code,generated_kg,recycled_kg,imputed_flag 2023-01,2023,1,33010,전주시,PET,12500.0,4200.0,false 2023-01,2023,1,33020,군산시,HDPE,8200.0,3100.0,false 2023-01,2023,1,33030,익산시,PP,5400.0,1200.0,true 2023-01,2023,1,33040,정읍시,PET,7200.0,2100.0,false 2023-01,2023,1,33050,남원시,HDPE,4100.0,1300.0,false 2023-01,2023,1,33060,김제시,PP,3600.0,900.0,false 2023-02,2023,2,33010,전주시,PET,13000.0,4500.0,false 2023-02,2023,2,33020,군산시,HDPE,8000.0,2900.0,false 2023-02,2023,2,33030,익산시,PP,5600.0,1400.0,false 2023-02,2023,2,33040,정읍시,PET,7400.0,2200.0,false 2023-02,2023,2,33050,남원시,HDPE,4300.0,1400.0,false 2023-02,2023,2,33060,김제시,PP,3700.0,950.0,false 2023-03,2023,3,33010,전주시,PET,12800.0,4300.0,false 2023-03,2023,3,33020,군산시,HDPE,8100.0,3000.0,true 2023-03,2023,3,33030,익산시,PP,5500.0,1300.0,false 2023-03,2023,3,33040,정읍시,PET,7600.0,2300.0,false 2023-03,2023,3,33050,남원시,HDPE,4200.0,1350.0,false 2023-03,2023,3,33060,김제시,PP,3800.0,1000.0,false 2023-04,2023,4,33010,전주시,PET,13500.0,4700.0,false 2023-04,2023,4,33020,군산시,HDPE,8300.0,3150.0,false 2023-04,2023,4,33030,익산시,PP,5700.0,1500.0,false 2023-04,2023,4,33040,정읍시,PET,7800.0,2400.0,false 2023-04,2023,4,33050,남원시,HDPE,4400.0,1450.0,false 2023-04,2023,4,33060,김제시,PP,3900.0,1050.0,false 2023-05,2023,5,33010,전주시,PET,14000.0,4900.0,false 2023-05,2023,5,33020,군산시,HDPE,8500.0,3300.0,false 2023-05,2023,5,33030,익산시,PP,5900.0,1600.0,false 2023-05,2023,5,33040,정읍시,PET,8000.0,2500.0,false 2023-05,2023,5,33050,남원시,HDPE,4500.0,1500.0,false 2023-05,2023,5,33060,김제시,PP,4000.0,1100.0,false 2023-06,2023,6,33010,전주시,PET,13800.0,4800.0,false 2023-06,2023,6,33020,군산시,HDPE,8400.0,3250.0,false 2023-06,2023,6,33030,익산시,PP,6000.0,1700.0,true 2023-06,2023,6,33040,정읍시,PET,8200.0,2600.0,false 2023-06,2023,6,33050,남원시,HDPE,4600.0,1550.0,false 2023-06,2023,6,33060,김제시,PP,4100.0,1150.0,false 2023-07,2023,7,33010,전주시,PET,14200.0,5000.0,false 2023-07,2023,7,33020,군산시,HDPE,8600.0,3350.0,false 2023-07,2023,7,33030,익산시,PP,6100.0,1750.0,false 2023-07,2023,7,33040,정읍시,PET,8400.0,2700.0,false 2023-07,2023,7,33050,남원시,HDPE,4700.0,1600.0,false 2023-07,2023,7,33060,김제시,PP,4200.0,1200.0,false
+(위는 상위 50행 샘플예시 )
+
+아래는 위 데이터를 기반으로 만든 가상 summary_stats.csv(재질별 합계 및 재활용률). 재활용률은 (total_recycled_kg / total_generated_kg) * 100 으로 계산한 값(소수 둘째 자리 반올림).
+
+material_code,total_generated_kg,total_recycled_kg,recycling_rate_percent PET,106900.0,35700.0,33.38 HDPE,86300.0,31500.0,36.51 PP,57700.0,16050.0,27.83
+
+정의(권장)
+재활용률 = sum(recycled_kg) / sum(generated_kg)
+취약지점 후보:
+재활용률 기준: 하위 N% 또는 하위 K개(예: 하위 5개 시군구)
+데이터 품질 기준: imputed_flag 비율이 높은 구간(예: imputed 비율 > 5%)
+추가 필터: generated_kg가 매우 적으면(작은 분모) 제외하거나 가중치 적용
+pandas (Python) 코드 — 복사해서 실행하면 바로 표 나옴
+전체 시군구별 재활용률(재질 합산) 및 imputed 비율:
+import pandas as pd
+
+df = pd.read_csv('master_1to3.csv', encoding='utf-8')
+# 기본 집계: 시군구별 전체
+agg_region = df.groupby(['region_code','region_name']).agg(
+    total_generated = ('generated_kg','sum'),
+    total_recycled = ('recycled_kg','sum'),
+    imputed_count = ('imputed_flag', lambda x: x.astype(bool).sum()),
+    record_count = ('imputed_flag', 'count')
+).reset_index()
+agg_region['recycling_rate'] = agg_region['total_recycled'] / agg_region['total_generated']
+agg_region['imputed_ratio'] = agg_region['imputed_count'] / agg_region['record_count']
+
+# 하위 5개(재활용률 기준)
+vulnerable_by_rate = agg_region.sort_values('recycling_rate').head(5)
+
+# imputed 높은 상위 10개
+vulnerable_by_imputed = agg_region.sort_values('imputed_ratio', ascending=False).head(10)
+
+agg_comb = df.groupby(['region_code','region_name','material_code']).agg(
+    total_generated = ('generated_kg','sum'),
+    total_recycled = ('recycled_kg','sum'),
+    imputed_count = ('imputed_flag', lambda x: x.astype(bool).sum()),
+    record_count = ('imputed_flag','count')
+).reset_index()
+agg_comb['recycling_rate'] = agg_comb['total_recycled'] / agg_comb['total_generated']
+agg_comb['imputed_ratio'] = agg_comb['imputed_count'] / agg_comb['record_count']
+vulnerable_comb = agg_comb.sort_values('recycling_rate').query('total_generated>0').head(20)
+
+[
+1단계: 시군구 전체 합산으로 하위 10 도출
+2단계: 시군구×재질로 세부 취약조합 도출 → 정책적 개입 우선순위 선정
+3단계: imputed 비율 및 데이터 결측/이상치 로그 확인 → 데이터 보강 계획 수립
+이것 들에 필요 할것 같은 데이터 분석 하기 즉 위 3단계를 목표로 하는 빅데이터 분석및 시각화
+- 필수 과정 포함(공공데이터 활용, 데이터 특징 파악, 데이터 전처리, 데이터 분석, 분석 결과 시각화)
+]
+
+master_1to3.csv(월단위[꼭 월 단위 일 필요는 없음]·군구·재질별 집계)와 summary_stats.csv(재질별 합계 및 재활용률) 작성

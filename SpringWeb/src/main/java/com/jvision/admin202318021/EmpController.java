@@ -1,6 +1,7 @@
 package com.jvision.admin202318021;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -118,11 +119,8 @@ public class EmpController {
         return "result/showmd";
     }
 
-    // API 환경데이터 시각화
-    @GetMapping("/data")
-    public String data() {
-        return "data";
-    }
+    // NOTE: `/data` mapping removed from EmpController to avoid conflict with DataController
+    // DataController is the canonical handler for the data analysis page and provides model attributes.
 
     // 아이디어 투표
     @GetMapping("/idea")
